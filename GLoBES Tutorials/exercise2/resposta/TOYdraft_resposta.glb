@@ -1,0 +1,172 @@
+%!GLoBES
+
+$version="3.0.0"
+
+
+/* Utilizem esse modelo de arquivo .glb para montar seu experimento! */
+
+
+/* ######################## Definição do Fluxo ######################################### */
+
+
+nuflux(#nue_plus)<			 
+	@flux_file = "NUEplus.dat"
+	@time = 2		       
+  	@norm = 2.4966e7
+>
+
+nuflux(#nue_minus)<			       
+	@flux_file = "NUEminus.dat"		
+	@time = 6		       
+  	@norm = 2.49513e7
+>
+
+
+
+/* ######################## Configurações do detector ################################# */
+
+
+$target_mass = 	 500       	/* em kt */
+
+
+/* ######################## Janela de Energia ##################################### */
+
+
+/* Energia verdadeira do neutrino (pre-smearing) */
+
+$sampling_points = 18 		/* números de bin de energia */
+
+$sampling_min =    0.2		/* GeV */
+$sampling_max =    2.0		/* GeV */
+
+/* Energia reconstruída do neutrino (post-smearing) */
+
+$bins = 		18	/* números de bin de energia */
+$emin = 	        0.2	/* GeV */
+$emax = 	        2.0	/* GeV */
+
+
+/* ######################## Configurações do baseline ################################## */
+
+
+$profiletype = 		3 
+$densitytab = 		{2.95} 
+$lengthtab = 		{350}	/* km */
+
+
+/* ######################## Resolução de energia ################################# */
+
+energy(#ERES)<
+	@type = 1
+	@sigma_e = {0,0.0,0.085}
+>
+
+
+/* ######################## Seção de choque #################################### */
+
+
+cross(#CC)<
+	@cross_file = "XCC.dat"
+>
+
+cross(#NC)<
+	@cross_file = "XNC.dat"
+>
+
+
+
+
+/* ######################### Definições dos canais ############################## */
+
+channel(#nu_mu_signal)<
+	@channel = 	#nue_plus:	+:	e:	m:	#CC:    #ERES	
+	@post_smearing_efficiencies = {0.13734, 0.55917, 0.728294, 0.763218, 0.720054, 0.719662, 0.721624, 0.692194, 0.742028, 0.73732, 0.762826, 0.738497, 0.707497, 0.729079, 0.736142, 0.744775, 0.725548, 0.773028}
+>
+
+channel(#nu_e_beam)<
+	@channel = 	#nue_plus:	+:	e:	e:	#CC:    #ERES
+>
+
+channel(#nu_e_NC)<
+	@channel = 	#nue_plus:	+:	NOSC_e:    NOSC_e:	#NC:    #ERES
+>
+
+
+channel(#anu_mu_signal)<
+	@channel = 	#nue_minus:	-:	e:	m:	#CC:    #ERES	
+        @post_smearing_efficiencies = {0.0773028, 0.401425, 0.521892, 0.554461, 0.534056, 0.505804, 0.530132, 0.527778, 0.536803, 0.535626, 0.537588, 0.562309, 0.533272, 0.547006, 0.563486, 0.514829, 0.554069, 0.52817}
+>
+
+channel(#anu_e_beam)<
+	@channel = 	#nue_minus:	-:	e:	e:	#CC:    #ERES
+>
+
+channel(#anu_e_NC)<
+	@channel = 	#nue_minus:	-:	NOSC_e:    NOSC_e:	#NC:    #ERES
+>
+
+
+
+
+/* ########################## DEFININDO AS REGRAS ############################### */
+ 
+ 
+rule(#Nu_MU_Appearance)<
+ 	@signal = 1.0@#nu_mu_signal
+	@signalerror = 0.025 : 0.001
+	
+	@background =  0.001@#nu_e_NC : 0.001@#nu_e_beam
+	@backgrounderror = 0.2 : 0.001
+		
+	@sys_on_function = "chiSpectrumTilt"
+	@sys_off_function = "chiNoSysSpectrum"
+	
+	@energy_window = 0.2 : 2.0
+>
+
+rule(#Nu_E_Disappearance)<
+ 	@signal = 0.8@#nu_e_beam
+	@signalerror = 0.025 : 0.001
+	
+	@background =  0.001@#nu_e_NC
+	@backgrounderror = 0.2 : 0.001
+		
+	@sys_on_function = "chiSpectrumTilt"
+	@sys_off_function = "chiNoSysSpectrum"
+	
+	@energy_window = 0.2 : 2.0
+>
+
+rule(#ANu_MU_Appearance)<
+ 	@signal = 1.0@#anu_mu_signal
+	@signalerror = 0.025 : 0.001
+	
+	@background =  0.001@#anu_e_NC : 0.001@#anu_e_beam
+	@backgrounderror = 0.2 : 0.001
+		
+	@sys_on_function = "chiSpectrumTilt"
+	@sys_off_function = "chiNoSysSpectrum"
+	
+	@energy_window = 0.2 : 2.0
+>
+
+rule(#ANu_E_Disappearance)<
+ 	@signal = 0.8@#anu_e_beam
+	@signalerror = 0.025 : 0.001
+	
+	@background =  0.001@#anu_e_NC
+	@backgrounderror = 0.2 : 0.001
+		
+	@sys_on_function = "chiSpectrumTilt"
+	@sys_off_function = "chiNoSysSpectrum"
+	
+	@energy_window = 0.2 : 2.0
+>
+
+
+
+/* ############################################################################
+  *                                                                           *
+  *                              FIM DO ARQUIVO                               *
+  *				                                               *
+   ############################################################################ */ 

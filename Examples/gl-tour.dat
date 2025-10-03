@@ -1,0 +1,64 @@
+
+Oscillation probabilities in vacuum: 1->1: 0.999955 1->2: 2.59032e-05 1->3: 1.924e-05 
+Oscillation probabilities in matter: 1->1: 0.999965 1->2: 1.99581e-05 1->3: 1.48288e-05 
+
+chi2 with systematics only: 21.6747
+
+This we would have from the CP-even appearance channel only: 20.4597
+
+The sum over all rules gives again: 21.6747
+
+chi2 with correlations: 2.03269 
+Position of minimum: theta12,theta13,theta23,delta,sdm,ldm,rho
+0.541394 0.0193698 0.745193 1.74802 6.64569e-05 0.00200549 
+1.00383 
+Iterations: 1913
+Note that s22theta13 is unchanged/kept fixed: 0.0015! 
+
+chi2 with correlations other than with deltacp: 4.03406 
+
+chi2 with correlation only with deltacp: 2.79027 
+
+chi2 with statistics only: 35.2241
+
+chi2 at minimum: 4.55836 
+Position of minimum: theta12,theta13,theta23,delta,sdm,ldm,rho
+0.585911 0.0276395 0.724423 1.04741 7.84034e-05 -0.00191326 
+0.977218 
+Iterations: 7003
+
+NOW: TWO-EXPERIMENT SETUP NuFact@3000km+NuFact@7500km
+
+Magic baseline length: 7500, Density: 4.25286
+
+chi2 with systematics for all exps: 28.2466
+chi2 with systematics for 3000km: 21.6747
+chi2 with systematics for 7500km: 6.57182
+The two add again to: 28.2466
+
+chi2 with correlations for 3000km: 2.03269 
+0.541394 0.0193698 0.745193 1.74802 6.64569e-05 0.00200549 
+1.00383 1 
+Iterations: 1913
+
+chi2 with correlations for 7500km: 1.73017 
+0.557917 0.0193698 0.769647 4.52228 6.98308e-05 0.0020012 
+1 1.01884 
+Iterations: 1270
+
+chi2 with correlations for combination: 3.58266 
+0.543767 0.0193698 0.770083 1.75695 6.61428e-05 0.00199925 
+1.00389 1.03203 
+Iterations: 2485
+
+The sum of the two chi2s is 3.76286, whereas the total chi2 is 3.58266 !
+
+chi2 at minimum, L=3000km: 5.42682 
+0.586517 0.0251981 0.745044 1.12983 7.87396e-05 -0.00190247 
+0.976715 1 
+Iterations: 3971
+
+chi2 for combination at minimum of L=3000km: 58.3386 
+0.594425 0.0222309 0.769442 1.21436 8.07951e-05 -0.00189549 
+0.974847 1.14084 
+Iterations: 1153

@@ -1,0 +1,175 @@
+%!GLoBES
+
+$version="3.0.0"
+
+/* Utilizem esse modelo de arquivo .glb para montar seu experimento! */
+
+
+/* ######################## Definição do Fluxo ######################################### */
+
+
+nuflux(#NUE_FLUX)<			               
+	@flux_file = "NUEplus.dat"		
+	@time = 2
+  	@norm = 2e7
+>
+
+nuflux(#ANUE_FLUX)<
+	@flux_file = "NUEminus.dat"
+	@time = 6
+  	@norm = 2e7
+>
+
+
+
+/* ######################## Configurações do detector ################################# */
+
+
+$target_mass =    500     	/* em kt */
+
+
+/* ######################## Janela de Energia ##################################### */
+
+
+/* Energia verdadeira do neutrino (pre-smearing) */
+
+$sampling_points = 20		/* números de bin de energia */
+
+$sampling_min =   0.2		/* GeV */
+$sampling_max =    2		/* GeV */
+
+/* Energia reconstruída do neutrino (post-smearing) */
+
+$bins = 	18		/* números de bin de energia */
+$emin = 	0.2       	/* GeV */
+$emax = 	2.0       	/* GeV */
+
+
+/* ######################## Configurações do baseline ################################## */
+
+
+
+$profiletype =   3
+$densitytab = 	 {2.95}      /* g/cm^3  */
+$lengthtab =    {350}	      /* km */
+
+
+
+/* ######################## Resolução de energia ################################# */
+
+
+
+energy(#ENREC)<
+    @type = 1
+    @sigma_e = {0.0,0.0,0.085}
+>
+
+
+
+/* ######################## Seção de choque #################################### */
+
+
+cross(#XS_CC)<
+	@cross_file = "XCC.dat" 
+>
+
+cross(#XS_NC)<
+	@cross_file = "XNC.dat"
+>
+
+
+/* ######################### Definições dos canais ############################## */
+
+
+
+channel(#NUMU_APP)<
+	@channel = 	#NUE_FLUX:	+:	e:	m:	#XS_CC:    #ENREC	
+	@post_smearing_efficiencies = {0.0773028, 0.401425, 0.521892, 0.554461, 0.534056, 0.505804, 0.530132, 0.527778, 0.536803, 0.535626, 0.537588, 0.562309, 0.533272, 0.547006, 0.563486, 0.514829, 0.554069, 0.52817}
+>
+
+
+channel(#ANUMU_APP)<
+	@channel = 	#ANUE_FLUX:	-:	e:	m:	#XS_CC:    #ENREC
+	@post_smearing_efficiencies = {0.13734, 0.55917, 0.728294, 0.763218, 0.720054, 0.719662, 0.721624, 0.692194, 0.742028, 0.73732, 0.762826, 0.738497, 0.707497, 0.729079, 0.736142, 0.744775, 0.725548, 0.773028}	
+>
+
+channel(#NUE_NC)<
+	@channel = 	#NUE_FLUX:	+:	NOSC_e:	NOSC_e:	#XS_NC:    #ENREC	
+>
+
+
+channel(#ANUE_NC)<
+	@channel = 	#ANUE_FLUX:	-:	NOSC_e:	NOSC_e:	#XS_NC:    #ENREC	
+>
+
+channel(#NUE_BEAM)<
+	@channel = 	#NUE_FLUX:	+:	e:	e:	#XS_CC:    #ENREC	
+>
+
+channel(#ANUE_BEAM)<
+	@channel = 	#ANUE_FLUX:	-:	e:	e:	#XS_CC:    #ENREC	
+>
+
+
+/* ########################## DEFININDO AS REGRAS ############################### */
+
+ 
+rule(#NUE_RULE)<
+ 	@signal = 1.0@#NUE_BEAM
+	@signalerror = 0.025 : 0.001
+	
+	@background =  0.001@#NUE_NC
+	@backgrounderror = 0.2 : 0.001
+		
+	@sys_on_function = "chiSpectrumTilt"
+	@sys_off_function = "chiNoSysSpectrum"
+	
+	@energy_window = 0.2 : 2.0
+> 
+
+
+rule(#ANUE_RULE)<
+ 	@signal = 1.0@#ANUE_BEAM
+	@signalerror = 0.025 : 0.001
+	
+	@background =  0.001@#ANUE_NC
+	@backgrounderror = 0.2 : 0.001
+		
+	@sys_on_function = "chiSpectrumTilt"
+	@sys_off_function = "chiNoSysSpectrum"
+	
+	@energy_window = 0.2 : 2.0
+> 
+
+ 
+/* rule(#NUMU_RULE)<
+ 	@signal = 1.0@#NUMU_APP
+	@signalerror = 0.025 : 0.001 
+	
+	@background =  0.001@#NUE_NC : 0.001@#NUE_BEAM
+	@backgrounderror = 0.2 : 0.001 
+		
+	@sys_on_function = "chiSpectrumTilt"
+	@sys_off_function = "chiNoSysSpectrum"
+	
+	@energy_window = 0.2 : 2.0 
+> */
+
+/* rule(#ANUMU_RULE)<
+ 	@signal = 1.0@#ANUMU_APP
+	@signalerror = 0.025 : 0.001 
+	
+	@background =  0.001@#ANUE_NC : 0.001@#ANUE_BEAM
+	@backgrounderror = 0.2 : 0.001 
+		
+	@sys_on_function = "chiSpectrumTilt"
+	@sys_off_function = "chiNoSysSpectrum"
+	
+	@energy_window = 0.2 : 2.0 
+> */
+
+/* ############################################################################
+  *                                                                           *
+  *                              FIM DO ARQUIVO                               *
+  *				                                               *
+   ############################################################################ */ 
